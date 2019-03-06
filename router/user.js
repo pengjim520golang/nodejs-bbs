@@ -3,16 +3,74 @@ const db = require("./common/db")
 const md5 = require("./common/md5")
 const logs = require("./common/log")
 const time = require("./common/time")
+const path = require("path")
+const fs = require("fs")
 //用于编写bbs论坛的用户模块
 module.exports = function(){
     let router = express.Router()
 
 
+
     //渲染用户中心页面
     router.get('/ucenter',(req,res)=>{
+       //获取session
+       let userInfo = req.session["userInfo"]
        
-        console.log(req.session)
-        res.send("用户中心").end() 
+       res.render("ucenter.ejs",{avatar:userInfo.thumbnail,errMsg:""})
+    })
+
+    //上传头像的逻辑
+    router.post('/upload',(req,res)=>{
+        //获取session
+        let userInfo = req.session["userInfo"]
+        //获取文件域对象
+        let uploaded = req.files[0]
+        //只能上传.jpg、.jpeg、.png、.gif的文件
+        let exts = [".jpg",".jpeg",".png",".gif"]
+        //默认通过了验证
+        let flag = false 
+        //获取用户上传文件的后缀名称
+        let ext = path.extname(uploaded.originalname)
+        //变量后缀名数组
+        for(let item of exts){
+            if(item===ext){
+                flag = true;
+                break;
+            }
+        }
+        if(flag === false ){
+            res.render("ucenter.ejs",{avatar:userInfo.thumbnail,errMsg:"您上传的后缀名必须是"+exts.toString()})
+            res.end() 
+        }else{
+            //改名->更新数据库->更新session->跳转页面回/ucenter
+            function * updateAvatar(){
+                //改文件名
+                let fileName = yield (function(){
+                    //创建一个新的名字
+                    let newName = uploaded.destination + userInfo.username + ext
+                    //获取旧名字
+                    let oldName = uploaded.path
+                    //改名
+                    fs.rename(oldName,newName,(err)=>{
+                        it.next( userInfo.username + ext ) //改名成功就进入下一个yield操作
+                    })
+                })()
+                //修改数据库的头像字段
+                yield db.pool.query("update bbs_users set thumbnail=? where id=?",[fileName,userInfo.id],(err)=>{
+                    if(!err){
+                       //更新session
+                       req.session["userInfo"].thumbnail = fileName
+                       res.redirect("/user/ucenter")
+                       it.next()
+                    }
+                })
+
+            }
+
+            let it = updateAvatar()
+            it.next()
+        }
+
     })
 
 
