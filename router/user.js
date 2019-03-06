@@ -2,6 +2,7 @@ const express = require("express")
 const db = require("./common/db")
 const md5 = require("./common/md5")
 const logs = require("./common/log")
+const time = require("./common/time")
 //用于编写bbs论坛的用户模块
 module.exports = function(){
     let router = express.Router()
@@ -54,8 +55,7 @@ module.exports = function(){
             //设置登录成功后的session信息
             req.session["userInfo"] = data
             //写入登录日志
-            let loginTime = new Date().getTime() / 1000
-            logs.writeLoginLogs( data.username,parseInt( loginTime ) )
+            logs.writeLoginLogs( data.username, time.now() )
             res.send({status:0,message:"登录成功"}).end()
         },(err)=>{
             res.send({status:err.code,message:err.message}).end() 
@@ -67,11 +67,49 @@ module.exports = function(){
     })
 
 
-
     //渲染注册页面
     router.get('/register',(req,res)=>{
         res.render('register.ejs',{})
     })  
+
+
+    //注册逻辑
+    router.post('/register',(req,res)=>{
+
+            //获取用户名
+            let username = req.body.username 
+            //获取密码
+            let password = req.body.password      
+            //获取昵称
+            let nickname = req.body.nickname  
+            let promise = new Promise( (resovle,reject)=>{
+                //判断当前用户名是否已经存在
+                db.pool.query("select count(*) as total from bbs_users where username=?",[username],(err,data)=>{
+                        if(!err && data[0].total>0){
+                            reject( {code:202,message:`论坛账号${username}已经被注册了~！`} )
+                        }else if(data[0].total===0){
+                            resovle({code:0,data:[username,md5(password),nickname,time.now()]})
+                        }
+                })
+            } )
+
+            promise.then( (result)=>{
+                
+                db.pool.query("insert into bbs_users(username,password,nickname,register_time)values(?,?,?,?)",result.data,(err)=>{
+                    if(!err){
+                        res.send({status:0,message:"注册成功~！"}).end() 
+                    }
+                })
+            },(err)=>{
+                res.send({status:err.code,message:err.message}).end() 
+            })
+
+
+
+    })  
+
+
+
 
     return router
 }
