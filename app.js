@@ -28,6 +28,8 @@ app.use( cookieSession({
     maxAage:20*60*1000
 }) )
 
+//渲染出主题页面
+app.use("/",require('./router/index')())
 
 //渲染出用户登录和注册页面
 app.use("/user",require('./router/user')())
