@@ -37,134 +37,55 @@
 
 	<div>
 		
-		<p><button class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;发布论坛主题</button><p>
-		<p>今天发帖总数:30篇，最后发帖时间:2019-03-05 11:41:33</p>
+		<p><button class="btn btn-info" onclick="window.location.href='/addtopic'"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;发布论坛主题</button><p>
+		<p>今天发帖总数:<%= rsCount %>篇，
+		<% if(rsCount>0 && lasttime!=""){%>
+			最后发帖时间:<%= lasttime %>
+		<% }else{ %>
+			今天还木有人发帖哦！
+		<% } %>
+		</p>
 		
 	</div>
 
+	<% if(rs!==null){ %>
+
+		<% for(let item of rs){%>
+    <div class="media">
+		  <div class="media-left media-middle">
+			<a href="/list?id=<%= item.id %>">
+			  <img class="media-object" src="/images/<%= item.icon %>" alt="<%= item.title %>" width="64px" height="64px">
+			</a>
+		  </div>
+		  <div class="media-body">
+			<a href="/list?id=<%= item.id %>">
+			<h4 class="media-heading text-info"><%= item.title %></h4>
+			</a> 
+			<a href="/hidden?id=<%= item.id %>" class="btn btn-danger btn-xs">隐藏</a>
+			<%= item.descr %>
+			
+		  </div>
+		  <br />
+	</div>
+	<%}%>
+
+
+
+	<% }else{ %>
     <div class="media">
 		  <div class="media-left media-middle">
 			<a href="#">
-			  <img class="media-object" src="/images/topic1.png" alt="Javascript讨论区" width="64px" height="64px">
+			  <img class="media-object" src="/images/warning.png" width="64px" height="64px">
 			</a>
 		  </div>
 		  <div class="media-body">
-			<h4 class="media-heading text-info">Javascript讨论区</h4>
-			讨论一切关于js开发的东西,包括ES5,ES6和nodejs最新动态
+			<h4 class="media-heading text-info">没有任何讨论区</h4>
+			
 		  </div>
 		  <br />
 	</div>
-
-    <div class="media">
-		  <div class="media-left media-middle">
-			<a href="#">
-			  <img class="media-object" src="/images/topic2.png" alt="HTML5讨论区" width="64px" height="64px">
-			</a>
-		  </div>
-		  <div class="media-body">
-			<h4 class="media-heading text-info">HTML5讨论区</h4>
-			讨论一切关于H5开发的东西,包括响应式布局,小游戏开发最新动态
-		  </div>
-		  <br />
-	</div>
-
-
-    <div class="media">
-		  <div class="media-left media-middle">
-			<a href="#">
-			  <img class="media-object" src="images/topic3.png" alt="HTML5讨论区" width="64px" height="64px">
-			</a>
-		  </div>
-		  <div class="media-body">
-			<h4 class="media-heading text-info">Golang讨论区</h4>
-			讨论一切关于Golang开发的东西,包括区块链,以太坊,Beego开发最新动态
-		  </div>
-		  <br />
-	</div>
-
-
- <div class="media">
-		  <div class="media-left media-middle">
-			<a href="#">
-			  <img class="media-object" src="images/topic1.png" alt="Javascript讨论区" width="64px" height="64px">
-			</a>
-		  </div>
-		  <div class="media-body">
-			<h4 class="media-heading text-info">Javascript讨论区</h4>
-			讨论一切关于js开发的东西,包括ES5,ES6和nodejs最新动态
-		  </div>
-		  <br />
-	</div>
-
-    <div class="media">
-		  <div class="media-left media-middle">
-			<a href="#">
-			  <img class="media-object" src="images/topic2.png" alt="HTML5讨论区" width="64px" height="64px">
-			</a>
-		  </div>
-		  <div class="media-body">
-			<h4 class="media-heading text-info">HTML5讨论区</h4>
-			讨论一切关于H5开发的东西,包括响应式布局,小游戏开发最新动态
-		  </div>
-		  <br />
-	</div>
-
-
-    <div class="media">
-		  <div class="media-left media-middle">
-			<a href="#">
-			  <img class="media-object" src="images/topic3.png" alt="HTML5讨论区" width="64px" height="64px">
-			</a>
-		  </div>
-		  <div class="media-body">
-			<h4 class="media-heading text-info">Golang讨论区</h4>
-			讨论一切关于Golang开发的东西,包括区块链,以太坊,Beego开发最新动态
-		  </div>
-		  <br />
-	</div>
-
-
- <div class="media">
-		  <div class="media-left media-middle">
-			<a href="#">
-			  <img class="media-object" src="images/topic1.png" alt="Javascript讨论区" width="64px" height="64px">
-			</a>
-		  </div>
-		  <div class="media-body">
-			<h4 class="media-heading text-info">Javascript讨论区</h4>
-			讨论一切关于js开发的东西,包括ES5,ES6和nodejs最新动态
-		  </div>
-		  <br />
-	</div>
-
-    <div class="media">
-		  <div class="media-left media-middle">
-			<a href="#">
-			  <img class="media-object" src="images/topic2.png" alt="HTML5讨论区" width="64px" height="64px">
-			</a>
-		  </div>
-		  <div class="media-body">
-		  <a href="#">
-			<h4 class="media-heading text-info">HTML5讨论区</h4>
-		  </a>
-			讨论一切关于H5开发的东西,包括响应式布局,小游戏开发最新动态
-		  </div>
-		  <br />
-	</div>
-
-
-    <div class="media">
-		  <div class="media-left media-middle">
-			<a href="#">
-			  <img class="media-object" src="images/topic3.png" alt="HTML5讨论区" width="64px" height="64px">
-			</a>
-		  </div>
-		  <div class="media-body">
-			<h4 class="media-heading text-info">Golang讨论区</h4>
-			讨论一切关于Golang开发的东西,包括区块链,以太坊,Beego开发最新动态
-		  </div>
-		  <br />
-	</div>
+	<% } %>
+  
 
 
 

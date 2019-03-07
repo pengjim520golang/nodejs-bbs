@@ -31,6 +31,9 @@ app.use( cookieSession({
 //渲染出主题页面
 app.use("/",require('./router/index')())
 
+//渲染出bbs列表功能
+app.use("/list",require('./router/list')())
+
 //渲染出用户登录和注册页面
 app.use("/user",require('./router/user')())
 

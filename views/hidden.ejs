@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.0/css/bootstrap.min.css" rel="stylesheet">
+    <title>bootcss</title>
+</head>
+<body>
+
+  <!-- 导航条　-->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">BSS论坛</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;论坛登录</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;论坛注册</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <div class="container" style="margin-top:80px" >
+
+    <div class="panel panel-info text-left">
+      <div class="panel-heading">
+        <h3 class="panel-title text-left">请输入管理密码</h3>
+      </div>
+      <div class="panel-body">
+       
+        <form action="/hidden" method="post">
+          <input type="hidden" name="ids" value="<%= topicId %>">
+          <div class="form-group text-left">
+              <label for="txtTitle">管理密码：</label>
+              <input type="password" id="txtPassword" name="txtPassword">
+          </div>
+
+
+            <button type="submit" class="btn btn-primary">设置隐藏</button>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+<script>
+  $(function(){
+      $("#txtIcon").on("change",function(){
+        //获取icon图片对象
+        $("#imgIcon").attr("src","images/"+this.value)
+      })
+  })
+
+</script>
+
+
+</html>

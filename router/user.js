@@ -1,13 +1,26 @@
 const express = require("express")
 const db = require("./common/db")
 const md5 = require("./common/md5")
-const logs = require("./common/log")
+//const logs = require("./common/log")
 const time = require("./common/time")
 const path = require("path")
 const fs = require("fs")
 //用于编写bbs论坛的用户模块
 module.exports = function(){
     let router = express.Router()
+
+    //验证是否已经登录
+    router.use("/",(req,res,next)=>{
+        if(req.url==='/register'){
+            next()
+            return;
+        }
+        if( !req.session["userInfo"] && req.url !== '/login' ){
+            res.redirect("/user/login")
+        }else{
+            next()
+        }
+    })
 
 
 
@@ -113,7 +126,7 @@ module.exports = function(){
             //设置登录成功后的session信息
             req.session["userInfo"] = data
             //写入登录日志
-            logs.writeLoginLogs( data.username, time.now() )
+            //logs.writeLoginLogs( data.username, time.now() )
             res.send({status:0,message:"登录成功"}).end()
         },(err)=>{
             res.send({status:err.code,message:err.message}).end() 
